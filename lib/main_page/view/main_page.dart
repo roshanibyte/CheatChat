@@ -34,16 +34,11 @@ class _MainPageState extends State<MainPage> {
       ),
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
-          
-          backgroundColor: Colors.grey.shade800.withOpacity(
-            0.93,
-          ),
-          
+          backgroundColor: Colors.black,
           elevation: 5,
           type: BottomNavigationBarType.fixed,
           unselectedItemColor: Colors.grey,
           currentIndex: controller.nowPage.value,
-          
           onTap: (value) {
             controller.pageViewController.jumpToPage(value);
           },
@@ -60,7 +55,6 @@ class _MainPageState extends State<MainPage> {
               label: "Chat",
             ),
             BottomNavigationBarItem(
-              
               icon: Icon(
                 Icons.update,
                 color:

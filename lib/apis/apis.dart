@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:testapp/model/chatmodel.dart';
@@ -47,6 +48,8 @@ class APIs {
         (user) async {
           if (user.exists) {
             me = ChatUser.fromJson(user.data()!);
+            await getFirebaseMessagingToken();
+            APIs.updateActiveStatus(true);
             log("My data: ${user.data()}");
           } else {
             await createUser().then((value) => getSelfInfo());
@@ -101,7 +104,8 @@ class APIs {
   static Future<void> updateActiveStatus(bool isOnline) async {
     firestore.collection('users').doc(user.uid).update({
       "is_online": isOnline,
-      "last_active": DateTime.now().microsecondsSinceEpoch.toString()
+      "last_active": DateTime.now().microsecondsSinceEpoch.toString(),
+      "push_token": me.pushToken,
     });
   }
 
@@ -137,6 +141,33 @@ class APIs {
         .collection('chat/${getCOnversationID(message.fromID)}/message/')
         .doc(message.sent)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
+
+// firebase messaging for Push Notification
+
+  static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+
+// for getting firbase message token
+
+  static Future<void> getFirebaseMessagingToken() async {
+    await fMessaging.requestPermission();
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  log('Notification clicked! Message data: ${message.data}');
+});
+
+  // FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+  //   if (message != null) {
+  //     print('App opened from terminated state by clicking on a notification');
+  //   }
+  // });
+    // await fMessaging.sendMessage(
+    //     to: "f8QSpgRNR_y0O1SaGQ-_w2:APA91bEF9OU3tcrsQKCXBTnPYGllt26pbjPFQhRPcU6Rs4LLcFzCCnHvGgGZXSR9m5toOTMcUKe7f8d3rSmcDBNEP3j-KmX8dl3HeKz2S4GYQLxxbVuwwGikT1tuLtjpZ2x4_S_XyZ-c");
+    await fMessaging.getToken().then((t) {
+      if (t != null) {
+        me.pushToken = t;
+        log("Push Notification : $t");
+      }
+    });
   }
 
 // For user update

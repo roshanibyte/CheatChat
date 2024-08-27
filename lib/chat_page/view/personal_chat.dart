@@ -24,6 +24,23 @@ class PersonalChatView extends StatefulWidget {
 }
 
 class _PersonalChatViewState extends State<PersonalChatView> {
+  final FocusNode focus = FocusNode();
+  bool isOpened = false;
+  @override
+  void initState() {
+    super.initState();
+    focus.addListener(
+      () {
+        if (focus.hasFocus) {
+          isOpened = true;
+        } else {
+          isOpened = false;
+        }
+        setState(() {});
+      },
+    );
+  }
+
   final controller = Get.put(ChatPageController());
   String imagePath = "";
   bool isImage = false;
@@ -34,6 +51,7 @@ class _PersonalChatViewState extends State<PersonalChatView> {
   // For handing text message
   final _textcontoller = TextEditingController();
   bool isShowEmoji = false;
+  bool isRecording = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,7 +70,7 @@ class _PersonalChatViewState extends State<PersonalChatView> {
           }
         },
         child: Scaffold(
-          backgroundColor: Colors.grey.shade800,
+          backgroundColor: Colors.black,
           appBar: AppBar(
             actions: [
               IconButton(
@@ -93,7 +111,12 @@ class _PersonalChatViewState extends State<PersonalChatView> {
             leadingWidth: 25,
             title: InkWell(
               onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ViewProfileScreenUser(user: widget.user),));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ViewProfileScreenUser(user: widget.user),
+                    ));
               },
               child: StreamBuilder(
                 stream: APIs.getUserInfo(widget.user),
@@ -158,7 +181,7 @@ class _PersonalChatViewState extends State<PersonalChatView> {
                 },
               ),
             ),
-            backgroundColor: Colors.grey.shade600,
+            backgroundColor: Colors.black,
             leading: IconButton(
               onPressed: () {
                 Get.back();
@@ -168,92 +191,111 @@ class _PersonalChatViewState extends State<PersonalChatView> {
               ),
             ),
           ),
-          body: Column(
+          resizeToAvoidBottomInset: false,
+          extendBodyBehindAppBar: true,
+          body: Stack(
+            fit: StackFit.expand,
             children: [
-              Expanded(
-                child: StreamBuilder(
-                    stream: APIs.getAllMessage(widget.user),
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        // if data is loading
-                        case ConnectionState.waiting:
-                        case ConnectionState.none:
-                          return SizedBox();
-
-                        case ConnectionState.active:
-                        case ConnectionState.done:
-
-                          // log("hasdata: ${snapshot.hasData}");
-                          final data = snapshot.data?.docs;
-
-                          _list = data
-                                  ?.map((e) => Message.fromJson(e.data()))
-                                  .toList() ??
-                              [];
-                          if (_list.isNotEmpty) {
-                            return ListView.builder(
-                              // physics: BouncingScrollPhysics(),
-                              reverse: true,
-                              itemCount:
-                                  //  isSearching == true
-                                  //     ? searchList.length
-                                  //     :
-                                  _list.length,
-                              // controller.jsonList == null
-                              //     ? 0
-                              //     : controller.jsonList.length,
-                              itemBuilder: (context, index) {
-                                return
-                                    //  ChatUserCard(
-                                    //   user: isSearching == true
-                                    //       ? searchList[index]
-                                    //       :
-                                    MessageCard(
-                                  message: _list[index],
-                                );
-                              },
-                            );
-                          } else {
-                            return Center(
-                              child: Text(
-                                "Say Hii 👋",
-                                style: TextStyle(
-                                  color: Colors.white60,
-                                  fontSize: 30,
-                                ),
-                              ),
-                            );
-                          }
-
-                        // log("Data: ${i.data()}");
-                      }
-                    }),
+              Image.asset(
+                "assets/chatBG.jpg",
+                width: Get.width,
+                height: double.infinity,
+                fit: BoxFit.cover,
               ),
-              if (isUploadingImage == true)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                    ),
+              Column(
+                children: [
+                  Expanded(
+                    child: StreamBuilder(
+                        stream: APIs.getAllMessage(widget.user),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            // if data is loading
+                            case ConnectionState.waiting:
+                            case ConnectionState.none:
+                              return SizedBox();
+
+                            case ConnectionState.active:
+                            case ConnectionState.done:
+
+                              // log("hasdata: ${snapshot.hasData}");
+                              final data = snapshot.data?.docs;
+
+                              _list = data
+                                      ?.map((e) => Message.fromJson(e.data()))
+                                      .toList() ??
+                                  [];
+                              if (_list.isNotEmpty) {
+                                return ListView.builder(
+                                  // physics: BouncingScrollPhysics(),
+                                  reverse: true,
+                                  itemCount:
+                                      //  isSearching == true
+                                      //     ? searchList.length
+                                      //     :
+                                      _list.length,
+                                  // controller.jsonList == null
+                                  //     ? 0
+                                  //     : controller.jsonList.length,
+                                  itemBuilder: (context, index) {
+                                    return
+                                        //  ChatUserCard(
+                                        //   user: isSearching == true
+                                        //       ? searchList[index]
+                                        //       :
+                                        MessageCard(
+                                      message: _list[index],
+                                    );
+                                  },
+                                );
+                              } else {
+                                return Center(
+                                  child: Text(
+                                    "Say Hii 👋",
+                                    style: TextStyle(
+                                      color: Colors.white60,
+                                      fontSize: 30,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                            // log("Data: ${i.data()}");
+                          }
+                        }),
                   ),
-                ),
-              chatInput(),
-              if (isShowEmoji)
-                EmojiPicker(
-                  textEditingController: _textcontoller,
-                  config: Config(
-                    searchViewConfig: SearchViewConfig(),
-                    height: 256,
-                    emojiViewConfig: EmojiViewConfig(
-                      columns: 7,
-                      backgroundColor: Colors.grey.shade800,
-                      emojiSizeMax: 28 * (Platform.isIOS ? 1.20 : 1.0),
+                  if (isUploadingImage == true)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 10.h),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      ),
                     ),
-                  ),
-                )
+                  chatInput(),
+                  if (true)
+                    SizedBox(
+                      height: isOpened
+                          ? MediaQuery.of(context).viewInsets.bottom
+                          : 0,
+                    ),
+                  if (isShowEmoji)
+                    EmojiPicker(
+                      textEditingController: _textcontoller,
+                      config: Config(
+                        searchViewConfig: SearchViewConfig(),
+                        height: 256,
+                        emojiViewConfig: EmojiViewConfig(
+                          columns: 7,
+                          backgroundColor: Colors.grey.shade800,
+                          emojiSizeMax: 28 * (Platform.isIOS ? 1.20 : 1.0),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
         ),
@@ -289,11 +331,12 @@ class _PersonalChatViewState extends State<PersonalChatView> {
                   },
                   icon: Icon(
                     Icons.emoji_emotions,
-                    color: Colors.blue,
+                    color: isRecording ? Colors.red : Colors.blue,
                   ),
                 ),
                 Expanded(
                   child: TextField(
+                    focusNode: focus,
                     onChanged: (value) => isImage = false,
                     onTap: () {
                       if (isShowEmoji)
@@ -306,37 +349,17 @@ class _PersonalChatViewState extends State<PersonalChatView> {
                     controller: _textcontoller,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.newline,
+                    readOnly: isRecording ? true : false,
                     style: TextStyle(color: Colors.black),
                     cursorColor: Colors.blue,
                     decoration: InputDecoration(
-                      hintText: "Type Something...",
-                      hintStyle: TextStyle(color: Colors.blue),
+                      hintText: isRecording
+                          ? "Record Your Audio..."
+                          : "Type Something...",
+                      hintStyle: TextStyle(
+                          color: isRecording ? Colors.red : Colors.blue),
                       border: InputBorder.none,
                     ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-
-                    //pick an Image
-                    final image = await picker.pickImage(
-                        source: ImageSource.camera, imageQuality: 40);
-                    if (image != null) {
-                      log("path of the image ${image.path}");
-
-                      setState(() => isUploadingImage = true);
-                      isImage = true;
-                      await APIs.sendChatImage(
-                        widget.user,
-                        File(image.path),
-                      );
-                      setState(() => isUploadingImage = false);
-                    }
-                  },
-                  icon: Icon(
-                    Icons.image,
-                    color: Colors.blue,
                   ),
                 ),
                 IconButton(
@@ -359,10 +382,34 @@ class _PersonalChatViewState extends State<PersonalChatView> {
                     }
                   },
                   icon: Icon(
-                    Icons.camera_alt_outlined,
-                    color: Colors.blue,
+                    Icons.image,
+                    color: isRecording ? Colors.red : Colors.blue,
                   ),
-                )
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+
+                    //pick an Image
+                    final image = await picker.pickImage(
+                        source: ImageSource.camera, imageQuality: 40);
+                    if (image != null) {
+                      log("path of the image ${image.path}");
+
+                      setState(() => isUploadingImage = true);
+                      isImage = true;
+                      await APIs.sendChatImage(
+                        widget.user,
+                        File(image.path),
+                      );
+                      setState(() => isUploadingImage = false);
+                    }
+                  },
+                  icon: Icon(
+                    Icons.camera_alt_outlined,
+                    color: isRecording ? Colors.red : Colors.blue,
+                  ),
+                ),
               ],
             ),
           ),
@@ -371,7 +418,14 @@ class _PersonalChatViewState extends State<PersonalChatView> {
           minWidth: 0,
           height: 45.h,
           shape: CircleBorder(),
-          color: Colors.blue,
+          color: isRecording ? Colors.red : Colors.blue,
+
+          // color: Colors.blue,
+          onLongPress: () {
+            setState(() {
+              isRecording = !isRecording;
+            });
+          },
           onPressed: () {
             if (_textcontoller.text.isNotEmpty) {
               APIs.sendMessage(widget.user, _textcontoller.text,
@@ -381,9 +435,11 @@ class _PersonalChatViewState extends State<PersonalChatView> {
           },
           child: Center(
             child: Icon(
-              Icons.send,
+              isRecording ? Icons.record_voice_over_outlined : Icons.send,
               size: 30.sp,
-              color: Colors.white,
+              color:
+                  // isRecording ? Colors.red :
+                  Colors.white,
             ),
           ),
         )

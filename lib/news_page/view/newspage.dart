@@ -56,9 +56,9 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.9),
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade600,
+        backgroundColor: Colors.black,
         actions: [
           IconButton(
               onPressed: () {

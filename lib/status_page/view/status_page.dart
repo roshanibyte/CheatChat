@@ -12,19 +12,18 @@ class StausPage extends StatefulWidget {
 }
 
 class _StausPageState extends State<StausPage> {
-  
   final controller = Get.put(StatusPageController());
-  static const List<String> _fruitOptions = <String>[
-    'apple',
-    'banana',
-    'orange',
-    'mango',
-    'grapes',
-    'watermelon',
-    'kiwi',
-    'strawberry',
-    'sugarcane',
-  ];
+  // static const List<String> _fruitOptions = <String>[
+  //   'apple',
+  //   'banana',
+  //   'orange',
+  //   'mango',
+  //   'grapes',
+  //   'watermelon',
+  //   'kiwi',
+  //   'strawberry',
+  //   'sugarcane',
+  // ];
   // @override
   // void initState() {
   //   super.initState();
@@ -62,8 +61,9 @@ class _StausPageState extends State<StausPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.9),
       appBar: AppBar(
+        backgroundColor: Colors.black,
         actions: [
           IconButton(
             onPressed: () {
@@ -159,8 +159,21 @@ class _StausPageState extends State<StausPage> {
               })
         ],
         title: const Text(
-          "Staus",
+          "Status",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
         ),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.person,
+            size: 30.sp,
+            color: Colors.white,
+          ),
+        ),
+        leadingWidth: 35.w,
       ),
       body: SingleChildScrollView(
         child: Column(

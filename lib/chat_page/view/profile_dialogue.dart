@@ -44,25 +44,28 @@ class ProfileDialogue extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      Get.to(ViewProfileScreenUser(
-                        user: user,
-                      ));
+                      Get.to(
+                        ViewProfileScreenUser(
+                          user: user,
+                        ),
+                      );
                     },
                     icon: Icon(
                       Icons.info,
-                      color: Colors.white,
+                      color: Colors.blue,
                     ),
                   ),
                 );
               }),
-              Align(
-                alignment: Alignment.center,
+              Positioned(
+                right: 70.w,
+                top: 40.h,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(80.r),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: CachedNetworkImage(
-                    height: 160.h,
-                    width: 160.w,
+                    height: 140.h,
+                    width: 140.w,
                     fit: BoxFit.fill,
                     imageUrl: user.image,
                     errorWidget: (context, url, error) {

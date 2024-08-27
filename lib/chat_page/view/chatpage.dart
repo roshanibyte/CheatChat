@@ -27,7 +27,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
-    APIs.updateActiveStatus(true);
+
     SystemChannels.lifecycle.setMessageHandler(
       (message) {
         log("message $message");
@@ -61,10 +61,11 @@ class _ChatPageState extends State<ChatPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.grey.shade800,
+        backgroundColor: Colors.black.withOpacity(0.9),
         appBar: AppBar(
           elevation: 1,
-          backgroundColor: const Color.fromRGBO(117, 117, 117, 1),
+          backgroundColor: Colors.black,
+
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(
@@ -73,7 +74,7 @@ class _ChatPageState extends State<ChatPage> {
               color: Colors.white,
             ),
           ),
-          leadingWidth: 30.w,
+          leadingWidth: 35.w,
           actions: [
             IconButton(
               splashRadius: 10.sp,
@@ -211,7 +212,7 @@ class _ChatPageState extends State<ChatPage> {
                                 offset: Offset(1, 1))
                           ],
                           color: Colors.red,
-                          fontSize: 20.sp,
+                          fontSize: 25.sp,
                           fontWeight: FontWeight.w600),
                     ),
                     TextSpan(
@@ -224,7 +225,7 @@ class _ChatPageState extends State<ChatPage> {
                                 offset: Offset(1, 1))
                           ],
                           color: Colors.green,
-                          fontSize: 25.sp,
+                          fontSize: 27.sp,
                           fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -238,7 +239,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Name, Email....",
+                    hintText: "Name, Email...",
                     hintStyle: TextStyle(
                       color: Colors.white54,
                     ),
