@@ -13,7 +13,6 @@ import 'package:testapp/choice_chip.dart';
 import 'package:testapp/model/chatmodel.dart';
 import 'package:testapp/profile/views/profile_page_view.dart';
 import 'package:testapp/setting.dart';
-import 'package:testapp/stopwatch.dart';
 
 class ChatPage extends StatefulWidget {
   ChatPage({super.key});
@@ -265,62 +264,67 @@ class _ChatPageState extends State<ChatPage> {
             top: 10,
           ),
           child: StreamBuilder(
-              stream: APIs.getAllUser(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  // if data is loading
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                    return Center(child: CircularProgressIndicator());
+            stream: APIs.getAllUserID(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                // if data is loading
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return Center(child: CircularProgressIndicator());
 
-                  case ConnectionState.active:
-                  case ConnectionState.done:
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  return StreamBuilder(
+                      stream: APIs.getAllUser(
+                          snapshot.data?.docs.map((e) => e.id).toList() ?? []),
+                      builder: (context, snapshot) {
+                        // log("hasdata: ${snapshot.hasData}");
+                        final data = snapshot.data?.docs;
 
-                    // log("hasdata: ${snapshot.hasData}");
-                    final data = snapshot.data?.docs;
+                        list = data
+                                ?.map((e) => ChatUser.fromJson(e.data()))
+                                .toList() ??
+                            [];
+                        if (list.isNotEmpty) {
+                          return ListView.builder(
+                            // physics: BouncingScrollPhysics(),
 
-                    list = data
-                            ?.map((e) => ChatUser.fromJson(e.data()))
-                            .toList() ??
-                        [];
-                    if (list.isNotEmpty) {
-                      return ListView.builder(
-                        // physics: BouncingScrollPhysics(),
-
-                        itemCount: isSearching == true
-                            ? searchList.length
-                            : list.length,
-                        // controller.jsonList == null
-                        //     ? 0
-                        //     : controller.jsonList.length,
-                        itemBuilder: (context, index) {
-                          return ChatUserCard(
-                            user: isSearching == true
-                                ? searchList[index]
-                                : list[index],
+                            itemCount: isSearching == true
+                                ? searchList.length
+                                : list.length,
+                            // controller.jsonList == null
+                            //     ? 0
+                            //     : controller.jsonList.length,
+                            itemBuilder: (context, index) {
+                              return ChatUserCard(
+                                user: isSearching == true
+                                    ? searchList[index]
+                                    : list[index],
+                              );
+                            },
                           );
-                        },
-                      );
-                    } else {
-                      return Center(
-                        child: Text(
-                          "No connections found !!",
-                          style: TextStyle(
-                            color: Colors.white54,
-                            fontSize: 30,
-                          ),
-                        ),
-                      );
-                    }
+                        } else {
+                          return Center(
+                            child: Text(
+                              "No connections found !!",
+                              style: TextStyle(
+                                color: Colors.white54,
+                                fontSize: 30,
+                              ),
+                            ),
+                          );
+                        }
 
-                  // log("Data: ${i.data()}");
-                }
-              }),
+                        // log("Data: ${i.data()}");
+                      });
+              }
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           // backgroundColor: Colors.green,
           onPressed: () {
-            Get.to(StopWatchPage());
+            showUpdatedMSGDialogue();
           },
           child: Icon(
             Icons.add_comment_rounded,
@@ -329,23 +333,114 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
+
+  void showUpdatedMSGDialogue() {
+    String email = "";
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shadowColor: Colors.white,
+        elevation: 5,
+        backgroundColor: Colors.black.withOpacity(0.7),
+        title: Row(
+          children: [
+            Icon(
+              Icons.person_add,
+              // size: 20.sp,
+              color: Colors.grey,
+            ),
+            5.horizontalSpace,
+            Text(
+              "Add New",
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        content: TextFormField(
+          onChanged: (value) => email = value,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+          decoration: InputDecoration(
+            enabled: true,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(
+                20.r,
+              ),
+            ),
+            hintStyle: TextStyle(
+              color: Colors.grey,
+            ),
+            hintText: "Email",
+            prefixIcon: Icon(
+              Icons.email,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        actions: [
+          MaterialButton(
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            color: Colors.red,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+          MaterialButton(
+              shape: ContinuousRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              color: Colors.blue,
+              onPressed: () async {
+                // APIs.updateMessage(widget.message, updatedMsg);
+                if (email.isNotEmpty) {
+                  log("Email: $email");
+                  if (email.trim().isNotEmpty) {
+                    log("Email of the User: $email");
+
+                    await APIs.addChatUser(email).then(
+                      (value) {
+                        log("Get this Email: $email");
+                        if (!value) {
+                          // Dialogs.showSnackbar(
+                          //     context, 'User does not Exists!');
+                        }
+                      },
+                    );
+
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: Text(
+                "Add+",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              )),
+        ],
+      ),
+    );
+  }
 }
 
-// class ChatUserCard extends StatelessWidget{
-//   const ChatUserCard ({super.key});
-//   @override
-//   Widget  build (BuildContext context){
-//     return Scaffold(
-//       body: Card(
-//         child: ListTile(
-//           leading: CircleAvatar(
-//             child: Icon(CupertinoIcons.person),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+ 
 
 class TablePage extends StatelessWidget {
   const TablePage({super.key});

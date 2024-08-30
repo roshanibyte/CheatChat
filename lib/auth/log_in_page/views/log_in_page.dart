@@ -130,7 +130,7 @@ class LogInPage extends StatelessWidget {
                     TextSpan(
                       text: " Email",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

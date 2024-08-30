@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testapp/chat_page/view/tic_toc_toe/tic_toc_toe.dart';
 import 'package:testapp/news_page/controller/news_page_controller.dart';
+import 'package:testapp/stopwatch.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -60,6 +62,23 @@ class _NewsPageState extends State<NewsPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(TicTacToeScreen());
+            },
+            icon: const Icon(
+              Icons.games,
+              color: Colors.white,
+            ),
+          ),
+          IconButton(
+              onPressed: () {
+                Get.to(StopWatchPage());
+              },
+              icon: const Icon(
+                Icons.run_circle,
+                color: Colors.white,
+              )),
           IconButton(
               onPressed: () {
                 // Navigator.push(context,

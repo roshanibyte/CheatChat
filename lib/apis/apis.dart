@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:testapp/model/chatmodel.dart';
 import 'package:testapp/model/message_model.dart';
 
@@ -38,6 +39,36 @@ class APIs {
             .doc(auth.currentUser?.uid)
             .get())
         .exists;
+  }
+
+// to select the user existed or not?
+  // for adding an chat user for our conversation
+  static Future<bool> addChatUser(String email) async {
+    String normalizedEmail = email.trim().toLowerCase();
+    final data = await firestore
+        .collection('users')
+        .where('email', isEqualTo: normalizedEmail)
+        .get();
+
+    log('Querying email: $email');
+    log('Data found: ${data.docs}');
+    if (data.docs.isNotEmpty && data.docs.first.id != user.uid) {
+      //user exists
+
+      log('user exists: ${data.docs.first.data()}');
+
+      firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('my_users')
+          .doc(data.docs.first.id)
+          .set(data.docs.first.data());
+      return true;
+    } else {
+      //user doesn't exists
+      Get.snackbar(backgroundColor: Colors.white, "No user ", "$email not add");
+      return false;
+    }
   }
 
 // for getting selfinfo
@@ -80,13 +111,46 @@ class APIs {
   }
 
 // for Getting all users
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser() {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser(
+    List<String> userIDs,
+  ) {
+    log("UserIDs: $userIDs");
+    if (userIDs.isNotEmpty) {
+      return firestore
+          .collection('users')
+          .where('id', whereIn: userIDs)
+          .snapshots();
+    } else {
+      log("The list of user IDs is empty.");
+
+      // empty stream
+      return Stream.empty();
+    }
+  }
+
+  // for getting all users ID
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUserID() {
     return firestore
         .collection('users')
-        .where('id', isNotEqualTo: user.uid)
+        .doc(user.uid)
+        .collection('my_users')
         .snapshots();
   }
 
+//For sending  first message
+  static Future<void> sendFirstMsg(
+      ChatUser chatUser, String msg, Type type) async {
+    await firestore
+        .collection('users')
+        .doc(chatUser.id)
+        .collection('my_users')
+        .doc(user.uid)
+        .set({}).then(
+      (value) => sendMessage(chatUser, msg, type),
+    );
+  }
+
+  //Get conversationID
   static String getCOnversationID(String id) => user.uid.hashCode <= id.hashCode
       ? '${user.uid}_$id'
       : '${id}_${user.uid}';
@@ -152,16 +216,9 @@ class APIs {
   static Future<void> getFirebaseMessagingToken() async {
     await fMessaging.requestPermission();
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-  log('Notification clicked! Message data: ${message.data}');
-});
+      log('Notification clicked! Message data: ${message.data}');
+    });
 
-  // FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-  //   if (message != null) {
-  //     print('App opened from terminated state by clicking on a notification');
-  //   }
-  // });
-    // await fMessaging.sendMessage(
-    //     to: "f8QSpgRNR_y0O1SaGQ-_w2:APA91bEF9OU3tcrsQKCXBTnPYGllt26pbjPFQhRPcU6Rs4LLcFzCCnHvGgGZXSR9m5toOTMcUKe7f8d3rSmcDBNEP3j-KmX8dl3HeKz2S4GYQLxxbVuwwGikT1tuLtjpZ2x4_S_XyZ-c");
     await fMessaging.getToken().then((t) {
       if (t != null) {
         me.pushToken = t;
@@ -238,5 +295,28 @@ class APIs {
     final imageUrl = await ref.getDownloadURL();
 
     await sendMessage(chatUser, imageUrl, Type.image);
+  }
+
+  // Delete Msg form the collection by selecting the delete button from bottoModalSheet
+
+  static Future<void> deleteMessage(Message message) async {
+    await firestore
+        .collection('chat/${getCOnversationID(message.toID)}/message/')
+        .doc(message.sent)
+        .delete();
+
+    if (message.type == Type.image)
+      await storage.refFromURL(message.sent).delete();
+  }
+
+  // Update Msg form the collection by selecting the delete button from bottoModalSheet
+
+  static Future<void> updateMessage(Message message, String updatedMsg) async {
+    await firestore
+        .collection('chat/${getCOnversationID(message.toID)}/message/')
+        .doc(message.sent)
+        .update({"msg": "${updatedMsg}🖌"});
+
+    if (message.type == Type.image) await null;
   }
 }

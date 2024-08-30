@@ -428,8 +428,15 @@ class _PersonalChatViewState extends State<PersonalChatView> {
           },
           onPressed: () {
             if (_textcontoller.text.isNotEmpty) {
-              APIs.sendMessage(widget.user, _textcontoller.text,
-                  isImage ? Type.image : Type.text);
+              if (_list.isEmpty) {
+                APIs.sendFirstMsg(widget.user, _textcontoller.text,
+                    isImage ? Type.image : Type.text);
+                _textcontoller.text = "";
+              } else {
+                APIs.sendMessage(widget.user, _textcontoller.text,
+                    isImage ? Type.image : Type.text);
+              }
+
               _textcontoller.text = "";
             }
           },

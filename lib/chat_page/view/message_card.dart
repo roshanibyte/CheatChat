@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:testapp/apis/apis.dart';
 import 'package:testapp/helper/my_date_util.dart';
 import 'package:testapp/model/message_model.dart';
@@ -18,6 +22,8 @@ class MessageCard extends StatefulWidget {
 }
 
 class _MessageCardState extends State<MessageCard> {
+  bool isSentAt = false;
+  bool isReadAt = false;
   @override
   Widget build(BuildContext context) {
     final isMe = APIs.user.uid == widget.message.fromID;
@@ -39,11 +45,7 @@ class _MessageCardState extends State<MessageCard> {
       children: [
         Flexible(
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.h),
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.h),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blue),
               color: const Color.fromARGB(255, 221, 245, 255),
@@ -56,9 +58,15 @@ class _MessageCardState extends State<MessageCard> {
             child: widget.message.type == ""
                 ? CircularProgressIndicator()
                 : widget.message.type == Type.text
-                    ? Text(
-                        "${widget.message.msg}",
-                        style: TextStyle(color: Colors.black),
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5.w,
+                          vertical: 5.h,
+                        ),
+                        child: Text(
+                          "${widget.message.msg}",
+                          style: TextStyle(color: Colors.black),
+                        ),
                       )
                     : widget.message.type == Type.text
                         ? Text(
@@ -70,38 +78,46 @@ class _MessageCardState extends State<MessageCard> {
                               showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return CachedNetworkImage(
-                                    height: 150.h,
-                                    width: 200.w,
-                                    fit: BoxFit.contain,
-                                    imageUrl: widget.message.msg,
-                                    placeholder: (context, url) {
-                                      return Icon(Icons.image);
-                                    },
-                                    errorWidget: (context, url, error) {
-                                      return Icon(
-                                        Icons.error,
-                                        color: Colors.white,
-                                      );
-                                    },
+                                  return ClipRRect(
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    child: CachedNetworkImage(
+                                      height: 150.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                      imageUrl: widget.message.msg,
+                                      placeholder: (context, url) {
+                                        return Icon(Icons.image);
+                                      },
+                                      errorWidget: (context, url, error) {
+                                        return Icon(
+                                          Icons.error,
+                                          color: Colors.white,
+                                        );
+                                      },
+                                    ),
                                   );
                                 },
                               );
                             },
-                            child: CachedNetworkImage(
-                              height: 150.h,
-                              width: 200.w,
-                              fit: BoxFit.cover,
-                              imageUrl: widget.message.msg,
-                              placeholder: (context, url) {
-                                return Icon(Icons.image);
-                              },
-                              errorWidget: (context, url, error) {
-                                return Icon(
-                                  Icons.error,
-                                  color: Colors.white,
-                                );
-                              },
+                            child: ClipRRect(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              borderRadius: BorderRadius.circular(20.r),
+                              child: CachedNetworkImage(
+                                height: 150.h,
+                                width: 200.w,
+                                fit: BoxFit.cover,
+                                imageUrl: widget.message.msg,
+                                placeholder: (context, url) {
+                                  return Icon(Icons.image);
+                                },
+                                errorWidget: (context, url, error) {
+                                  return Icon(
+                                    Icons.error,
+                                    color: Colors.white,
+                                  );
+                                },
+                              ),
                             ),
                           ),
           ),
@@ -127,7 +143,7 @@ class _MessageCardState extends State<MessageCard> {
 // our message or user message
   _greenMessage() {
     return Padding(
-      padding: EdgeInsets.all(10.w),
+      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -153,10 +169,10 @@ class _MessageCardState extends State<MessageCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 10.h,
-                  ),
+                  // padding: EdgeInsets.symmetric(
+                  //   horizontal: 10.w,
+                  //   vertical: 10.h,
+                  // ),
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 221, 245, 255),
                     border: Border.all(color: Colors.green),
@@ -164,12 +180,19 @@ class _MessageCardState extends State<MessageCard> {
                       topLeft: Radius.circular(20.r),
                       topRight: Radius.circular(20.r),
                       bottomLeft: Radius.circular(20.r),
+                      // bottomRight: Radius.circular(20.r),
                     ),
                   ),
                   child: widget.message.type == Type.text
-                      ? Text(
-                          "${widget.message.msg}",
-                          style: TextStyle(color: Colors.black),
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 5.w,
+                            vertical: 5.h,
+                          ),
+                          child: Text(
+                            "${widget.message.msg}",
+                            style: TextStyle(color: Colors.black),
+                          ),
                         )
                       : GestureDetector(
                           onTap: () {
@@ -177,8 +200,8 @@ class _MessageCardState extends State<MessageCard> {
                               context: context,
                               builder: (context) {
                                 return CachedNetworkImage(
-                                  height: 150.h,
-                                  width: 200.w,
+                                  // height: 150.h,
+                                  // width: 200.w,
                                   fit: BoxFit.contain,
                                   imageUrl: widget.message.msg,
                                   placeholder: (context, url) {
@@ -194,20 +217,24 @@ class _MessageCardState extends State<MessageCard> {
                               },
                             );
                           },
-                          child: CachedNetworkImage(
-                            height: 150.h,
-                            width: 200.w,
-                            fit: BoxFit.cover,
-                            imageUrl: widget.message.msg,
-                            placeholder: (context, url) {
-                              return Icon(Icons.image);
-                            },
-                            errorWidget: (context, url, error) {
-                              return Icon(
-                                Icons.error,
-                                color: Colors.white,
-                              );
-                            },
+                          child: ClipRRect(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              height: 150.h,
+                              width: 200.w,
+                              fit: BoxFit.cover,
+                              imageUrl: widget.message.msg,
+                              placeholder: (context, url) {
+                                return Icon(Icons.image);
+                              },
+                              errorWidget: (context, url, error) {
+                                return Icon(
+                                  Icons.error,
+                                  color: Colors.white,
+                                );
+                              },
+                            ),
                           ),
                         ),
                 ),
@@ -229,6 +256,8 @@ class _MessageCardState extends State<MessageCard> {
 
   void showBottomSheet(bool isMe, String msg) {
     showModalBottomSheet(
+      isDismissible: true,
+      enableDrag: true,
       backgroundColor: Colors.grey,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -256,7 +285,13 @@ class _MessageCardState extends State<MessageCard> {
                     icon: Icons.download,
                     Iconcolor: Colors.blue,
                     text: "Save Image",
-                    onTap: () {})
+                    onTap: () async {
+                      saveImageToGallery(widget.message.msg).then(
+                        (value) {
+                          Get.back();
+                        },
+                      );
+                    })
                 : optionItems(
                     icon: Icons.copy_all_outlined,
                     Iconcolor: Colors.blue,
@@ -266,7 +301,9 @@ class _MessageCardState extends State<MessageCard> {
                         await Clipboard.setData(
                           ClipboardData(text: msg),
                         ).then((_) {
-                          Fluttertoast.showToast(msg: "Copied to clipboard");
+                          Fluttertoast.showToast(
+                            msg: "Copied to clipboard",
+                          );
                         });
                       } catch (e) {
                         log("Copy exception here: $e");
@@ -282,13 +319,26 @@ class _MessageCardState extends State<MessageCard> {
                   icon: Icons.edit,
                   Iconcolor: Colors.blue,
                   text: "Edit Message",
-                  onTap: () {}),
+                  onTap: () {
+                    // content: Container(
+                    //   height: 100.h,
+                    //   width: 150.w,
+                    //   color: Colors.white,
+                    // ),
+                    Navigator.pop(context);
+
+                    showUpdatedMSGDialogue();
+                  }),
             if (isMe)
               optionItems(
                   icon: Icons.delete,
                   Iconcolor: Colors.red,
                   text: "Delete Message",
-                  onTap: () {}),
+                  onTap: () {
+                    APIs.deleteMessage(widget.message).then((value) {
+                      Navigator.pop(context);
+                    });
+                  }),
             if (isMe)
               Divider(
                 endIndent: 20.w,
@@ -299,16 +349,140 @@ class _MessageCardState extends State<MessageCard> {
                 icon: Icons.remove_red_eye,
                 Iconcolor: Colors.blue,
                 text: "Sent At",
-                onTap: () {}),
+                onTap: () {
+                  Fluttertoast.showToast(
+                      textColor: Colors.green,
+                      backgroundColor: Colors.white,
+                      msg:
+                          "Sent At:${MyDateUtil.getFormattedTime(context: context, time: widget.message.sent)}");
+                  Navigator.pop(context);
+                }),
             optionItems(
-                icon: Icons.remove_red_eye,
-                Iconcolor: Colors.green,
-                text: "Read At",
-                onTap: () {}),
+              icon: Icons.remove_red_eye,
+              Iconcolor: Colors.green,
+              text: "Read At",
+              onTap: () {
+                if (widget.message.read.isEmpty) {
+                  Fluttertoast.showToast(msg: "Read is empty");
+                } else {
+                  Fluttertoast.showToast(
+                      textColor: Colors.green,
+                      backgroundColor: Colors.white,
+                      msg:
+                          "Read At:${MyDateUtil.getFormattedTime(context: context, time: widget.message.read)}");
+                }
+                Navigator.pop(context);
+              },
+            ),
             20.verticalSpace,
           ],
         );
       },
+    );
+  }
+
+  // Function to save image to gallery
+  Future<void> saveImageToGallery(String imageUrl) async {
+    await requestStoragePermission();
+    try {
+      // Get the image data from the URL
+      final response = await get(Uri.parse(imageUrl));
+      final Uint8List imageData = response.bodyBytes;
+
+      // Save the image to the gallery
+      final result = await ImageGallerySaver.saveImage(imageData);
+      log("Image saved to gallery: $result");
+
+      // Show a success toast
+      Fluttertoast.showToast(msg: "Image saved to gallery!");
+    } catch (e) {
+      log("Failed to save image: $e");
+      Fluttertoast.showToast(msg: "Failed to save image.");
+    }
+  }
+
+  Future<void> requestStoragePermission() async {
+    // if (await Permission.storage.request().isGranted) {
+
+    // } else {
+
+    //   if (await Permission.storage.request().isDenied) {
+    //  Fluttertoast.showToast(msg: "Allow permission request to save the image");
+    //   }
+    // }
+
+    // For Android 10 and above
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      Fluttertoast.showToast(msg: "Permission Granted");
+    } else {
+      "";
+      // Fluttertoast.showToast(msg: "Allow Storage Permission to save the Image");
+    }
+  }
+
+  void showUpdatedMSGDialogue() {
+    String updatedMsg = widget.message.msg;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.message,
+              size: 15.sp,
+              color: Colors.grey,
+            ),
+            5.horizontalSpace,
+            Text(
+              "Update Message",
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        content: TextFormField(
+          initialValue: updatedMsg,
+          onChanged: (value) => updatedMsg = value,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(
+                20.r,
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          MaterialButton(
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            color: Colors.red,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+          MaterialButton(
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            color: Colors.blue,
+            onPressed: () {
+              APIs.updateMessage(widget.message, updatedMsg);
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Update",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
