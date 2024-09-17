@@ -9,10 +9,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:testapp/apis/apis.dart';
 import 'package:testapp/chat_page/controller/chat_page_controller.dart';
 import 'package:testapp/chat_page/view/chat_user_card.dart';
-import 'package:testapp/choice_chip.dart';
 import 'package:testapp/model/chatmodel.dart';
 import 'package:testapp/profile/views/profile_page_view.dart';
 import 'package:testapp/setting.dart';
+import 'package:testapp/to_do_task.dart';
 
 class ChatPage extends StatefulWidget {
   ChatPage({super.key});
@@ -63,6 +63,7 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Colors.black.withOpacity(0.9),
         appBar: AppBar(
           elevation: 1,
+          toolbarHeight: 60.h,
           backgroundColor: Colors.black,
 
           leading: Padding(
@@ -145,7 +146,7 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                       ),
                       onTap: () {
-                        Get.to(const ChoiceChipExample());
+                        Get.to(ToDoTask());
                       },
                     ),
                     PopupMenuItem(
@@ -440,8 +441,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
- 
-
 class TablePage extends StatelessWidget {
   const TablePage({super.key});
 
@@ -449,6 +448,7 @@ class TablePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 65.h,
         title: const Text("Table Widget"),
         leading: IconButton(
             onPressed: () {
@@ -514,6 +514,7 @@ class Graphpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 65.h,
         leading: IconButton(
             onPressed: () {
               Get.back();

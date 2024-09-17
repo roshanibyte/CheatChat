@@ -9,8 +9,12 @@ class CallPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.9),
       appBar: AppBar(
+        toolbarHeight: 65.h,
+
+        elevation: 1,
+        backgroundColor: Colors.black,
         actions: [
           IconButton(
             onPressed: () {
@@ -105,10 +109,19 @@ class CallPageView extends StatelessWidget {
                 ];
               })
         ],
-        title: Text("Calls"),
-        leading: Icon(
-          Icons.arrow_back,
-          // color: ,
+        title: Text(
+          "Calls",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        leadingWidth: 30.w,
+        leading: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          child: Icon(
+            Icons.call,
+            // color: ,
+          ),
         ),
       ),
       body: SizedBox(

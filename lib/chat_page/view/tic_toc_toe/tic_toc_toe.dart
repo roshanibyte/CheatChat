@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class TicTacToeScreen extends StatefulWidget {
   @override
@@ -61,27 +63,53 @@ class _TicTacToeScreenState extends State<TicTacToeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Tic-Tac-Toe'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          _buildBoard(),
-          SizedBox(height: 20),
-          Text(
-            _winner == ''
-                ? 'Turn: ${_isXTurn ? 'X' : 'O'}'
-                : _winner == 'Draw'
-                    ? 'It\'s a Draw!'
-                    : 'Winner: $_winner',
-            style: TextStyle(fontSize: 24, color: Colors.white),
+          Image.asset(
+            "assets/tic_toc_toe.jpg",
+            fit: BoxFit.cover,
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _resetGame,
-            child: Text('Reset Game'),
+          AppBar(
+            toolbarHeight: 65.h,
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
+            ),
+            title: Text(
+              'Tic-Tac-Toe',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildBoard(),
+              SizedBox(height: 20),
+              Text(
+                _winner == ''
+                    ? 'Turn: ${_isXTurn ? 'X' : 'O'}'
+                    : _winner == 'Draw'
+                        ? 'It\'s a Draw!'
+                        : 'Winner: $_winner',
+                style: TextStyle(fontSize: 24, color: Colors.black),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _resetGame,
+                child: Text('Reset Game'),
+              ),
+            ],
           ),
         ],
       ),

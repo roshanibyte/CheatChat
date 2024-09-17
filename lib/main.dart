@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:testapp/splash_screen.dart';
 
 import 'firebase_options.dart';
@@ -10,6 +12,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initilaizedFirebase();
 
+  //init the hive local storgae for the to do task
+  await Hive.initFlutter();
+
+  // Opening the hive box for the to do Task
+  var box = Hive.openBox("myBox");
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const MyApp());
 }
 

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:testapp/chat_page/view/kids_game/game_home_dart.dart';
 import 'package:testapp/chat_page/view/tic_toc_toe/tic_toc_toe.dart';
 import 'package:testapp/news_page/controller/news_page_controller.dart';
 import 'package:testapp/stopwatch.dart';
@@ -60,6 +62,8 @@ class _NewsPageState extends State<NewsPage> {
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.9),
       appBar: AppBar(
+        toolbarHeight: 65.h,
+
         backgroundColor: Colors.black,
         actions: [
           IconButton(
@@ -68,6 +72,15 @@ class _NewsPageState extends State<NewsPage> {
             },
             icon: const Icon(
               Icons.games,
+              color: Colors.white,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Get.to(GameHomePage());
+            },
+            icon: const Icon(
+              Icons.play_circle_sharp,
               color: Colors.white,
             ),
           ),
@@ -89,9 +102,13 @@ class _NewsPageState extends State<NewsPage> {
                 color: Colors.white,
               ))
         ],
-        leading: const Icon(
-          Icons.arrow_back,
-          color: Colors.white,
+        leadingWidth: 30.w,
+        leading: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          child: const Icon(
+            Icons.newspaper,
+            color: Colors.white,
+          ),
         ),
         title: const Text(
           "Latest News",

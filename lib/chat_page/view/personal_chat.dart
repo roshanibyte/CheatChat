@@ -72,6 +72,7 @@ class _PersonalChatViewState extends State<PersonalChatView> {
         child: Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
+            toolbarHeight: 65.h,
             actions: [
               IconButton(
                 onPressed: () {},
@@ -109,6 +110,16 @@ class _PersonalChatViewState extends State<PersonalChatView> {
               ),
             ],
             leadingWidth: 25,
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                size: 30,
+              ),
+            ),
+            centerTitle: true,
             title: InkWell(
               onTap: () {
                 Navigator.push(
@@ -130,7 +141,7 @@ class _PersonalChatViewState extends State<PersonalChatView> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(
-                          25,
+                          30,
                         ),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: CachedNetworkImage(
@@ -182,14 +193,6 @@ class _PersonalChatViewState extends State<PersonalChatView> {
               ),
             ),
             backgroundColor: Colors.black,
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-              ),
-            ),
           ),
           resizeToAvoidBottomInset: false,
           extendBodyBehindAppBar: true,

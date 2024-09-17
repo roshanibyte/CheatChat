@@ -142,6 +142,14 @@ class _MessageCardState extends State<MessageCard> {
 
 // our message or user message
   _greenMessage() {
+    Widget editIcon() {
+      return Icon(
+        Icons.edit,
+        size: 14.sp,
+        color: Colors.grey,
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
       child: Row(
@@ -189,9 +197,19 @@ class _MessageCardState extends State<MessageCard> {
                             horizontal: 5.w,
                             vertical: 5.h,
                           ),
-                          child: Text(
-                            "${widget.message.msg}",
-                            style: TextStyle(color: Colors.black),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "${widget.message.msg}",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              // Show edit icon if the message has been edited
+                              if (widget.message.isEdited ?? true) ...[
+                                5.horizontalSpace,
+                                editIcon(),
+                              ],
+                            ],
                           ),
                         )
                       : GestureDetector(
@@ -301,6 +319,7 @@ class _MessageCardState extends State<MessageCard> {
                         await Clipboard.setData(
                           ClipboardData(text: msg),
                         ).then((_) {
+                          // Navigator.pop(context);
                           Fluttertoast.showToast(
                             msg: "Copied to clipboard",
                           );
@@ -320,13 +339,6 @@ class _MessageCardState extends State<MessageCard> {
                   Iconcolor: Colors.blue,
                   text: "Edit Message",
                   onTap: () {
-                    // content: Container(
-                    //   height: 100.h,
-                    //   width: 150.w,
-                    //   color: Colors.white,
-                    // ),
-                    Navigator.pop(context);
-
                     showUpdatedMSGDialogue();
                   }),
             if (isMe)
@@ -421,6 +433,7 @@ class _MessageCardState extends State<MessageCard> {
   }
 
   void showUpdatedMSGDialogue() {
+    // Navigator.pop(context);
     String updatedMsg = widget.message.msg;
 
     showDialog(

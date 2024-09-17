@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class DismissedItem extends StatefulWidget {
@@ -149,6 +150,7 @@ class _CricketPitchState extends State<CricketPitch> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 65.h,
         leading: IconButton(
           onPressed: () {
             Get.back();

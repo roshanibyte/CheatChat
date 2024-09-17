@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:testapp/auth/log_in_page/views/log_in_page.dart';
+import 'package:testapp/landing_page/landing_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +18,7 @@ class _MyWidgetState extends State<SplashScreen> {
     super.initState();
     Timer(const Duration(seconds: 2), () {
       Get.to(
-        LogInPage(),
+        LandingPage(),
       );
     });
   }

@@ -13,9 +13,12 @@ class LogInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.8),
       appBar: AppBar(
-        elevation: 0,
+        toolbarHeight: 65.h,
+
+        backgroundColor: Colors.black,
+        elevation: 2,
         title: const Text(
           "Login and Register",
         ),

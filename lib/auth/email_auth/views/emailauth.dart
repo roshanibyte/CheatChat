@@ -21,10 +21,13 @@ class _EmailAuthState extends State<EmailAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.8),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.grey.shade600,
+        toolbarHeight: 65.h,
+
+        backgroundColor: Colors.black,
+        leadingWidth: 30.w,
         title: textwidget(
           data: "Email Login",
           color: Colors.white,
@@ -42,6 +45,7 @@ class _EmailAuthState extends State<EmailAuthPage> {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: Column(
           children: [
+            50.verticalSpace,
             textwidget(
               data: "Login With Your Email and \nPassword:",
               color: Colors.white,
@@ -49,7 +53,7 @@ class _EmailAuthState extends State<EmailAuthPage> {
               decoration: TextDecoration.underline,
               decorationColor: Colors.white,
             ),
-            10.verticalSpace,
+            30.verticalSpace,
             TextField(
                 style: TextStyle(
                   color: Colors.white,
@@ -159,8 +163,8 @@ class _EmailAuthState extends State<EmailAuthPage> {
               width: 150,
               child: ElevatedButton(
                   style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                    foregroundColor: MaterialStatePropertyAll(Colors.white),
+                    backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                    foregroundColor: WidgetStatePropertyAll(Colors.white),
                   ),
                   onPressed: () {
                     controller.loginUser();

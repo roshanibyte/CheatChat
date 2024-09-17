@@ -74,7 +74,7 @@ class _StopWatchPageState extends State<StopWatchPage> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape
-                        .circle, // this one is use for make the circle on ui.
+                        .circle,  
                     border: Border.all(
                       color: Color(0xff0395eb),
                       width: 4,

@@ -55,6 +55,8 @@ class _ViewProfileScreenUserState extends State<ViewProfileScreenUser> {
       ),
       appBar: AppBar(
         leadingWidth: 30.w,
+        toolbarHeight: 65.h,
+
 
         leading: IconButton(
             onPressed: () {

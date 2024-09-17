@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:testapp/auth/register_page/controller/register_page_controller.dart';
@@ -10,9 +11,12 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.8),
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade600,
+        toolbarHeight: 65.h,
+
+        backgroundColor: Colors.black,
+        leadingWidth: 30.w,
         leading: IconButton(
           onPressed: () {
             Get.back();
@@ -22,34 +26,8 @@ class RegisterPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: InkWell(
-        //       onTap: () {
-        //         // Get.to(const HelpPage());
-        //       },
-        //       child: const Column(
-        //         children: [
-        //           Icon(
-        //             Icons.help,
-        //             color: Colors.white,
-        //           ),
-        //           Text(
-        //             " Help",
-        //             style: TextStyle(
-        //               fontWeight: FontWeight.bold,
-        //               color: Colors.white,
-        //               fontSize: 12,
-        //             ),
-        //           )
-        //         ],
-        //       ),
-        //     ),
-        //   )
-        // ],
         title: const Text(
-          "RegisterPage",
+          "Register Page",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -121,13 +99,11 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(
                 height: 11,
               ),
-
               TextField(
                 style: TextStyle(
                   color: Colors.white,
                 ),
                 cursorColor: Colors.white,
-
                 controller: controller.selectedDateController,
                 onTap: () async {
                   DateTime? selectedDate = await showDatePicker(
@@ -143,8 +119,6 @@ class RegisterPage extends StatelessWidget {
                         formatedDate.toString();
                   }
                 },
-                // keyboardType: TextInputType.datetime,
-                // obscureText: true,
                 decoration: const InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -214,19 +188,10 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              // TextWidget(
-              //   text: "Save",
-              //   padding: const EdgeInsets.only(right: 50, left: 50, top: 8),
-              //   onTap: () => createAccount(),
-              // )
               SizedBox(
                 height: 40,
                 width: 100,
                 child: ElevatedButton(
-                  // style: const ButtonStyle(
-                  //   backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                  //   foregroundColor: MaterialStatePropertyAll(Colors.white),
-                  // ),
                   onPressed: () {
                     // Get.off(const MyApp());
                     // Get.pop(const MyProfile());

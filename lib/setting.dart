@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testapp/QR_page/view/qr_scanner_page.dart';
@@ -70,6 +71,8 @@ class _SettingsState extends State<Settings> {
       backgroundColor:
           colorChange == true ? defaultBackground : greenBackground,
       appBar: AppBar(
+        toolbarHeight: 65.h,
+
         elevation: 1,
         backgroundColor: Colors.grey.withOpacity(0.6),
         actions: [

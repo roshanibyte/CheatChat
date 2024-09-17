@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -19,6 +20,8 @@ class _QrScanViewState extends State<QrScanView> {
     return Scaffold(
       backgroundColor: Colors.grey.shade800,
       appBar: AppBar(
+        toolbarHeight: 65.h,
+
         backgroundColor: Colors.grey.shade600,
         leading: IconButton(
           onPressed: () {

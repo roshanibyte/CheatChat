@@ -30,7 +30,7 @@ class _ProofilePageViewState extends State<ProofilePageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.black.withOpacity(0.9),
 
       // Logout button here
 
@@ -49,9 +49,12 @@ class _ProofilePageViewState extends State<ProofilePageView> {
         ),
       ),
       appBar: AppBar(
-        elevation: 1,
+        toolbarHeight: 65.h,
 
-        backgroundColor: Colors.grey.shade600,
+        elevation: 1,
+        leadingWidth: 30,
+
+        backgroundColor: Colors.black,
         actions: [
           IconButton(
             onPressed: () {
@@ -171,6 +174,10 @@ class _ProofilePageViewState extends State<ProofilePageView> {
 
         title: const Text(
           "Profile Page",
+          style: TextStyle(
+            fontSize: 21,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         // centerTitle: true,
       ),

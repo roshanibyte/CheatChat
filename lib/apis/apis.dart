@@ -315,7 +315,10 @@ class APIs {
     await firestore
         .collection('chat/${getCOnversationID(message.toID)}/message/')
         .doc(message.sent)
-        .update({"msg": "${updatedMsg}🖌"});
+        .update({
+      "msg": "${updatedMsg}",
+      'isEdited': true,
+    });
 
     if (message.type == Type.image) await null;
   }

@@ -62,12 +62,20 @@ dependencies:
   saver_gallery: ^3.0.5
   permission_handler: ^11.3.1
   image_gallery_saver: ^2.0.3
+  flip_card: ^0.7.0
+  smooth_page_indicator: ^1.2.0+3
+  curved_navigation_bar: ^1.0.6
+  flutter_slidable: ^3.1.1
+  hive: ^2.0.0
+  hive_flutter: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
  
   flutter_launcher_icons: "^0.13.1"
+  hive_generator: ^1.1.0
+  build_runner: ^2.1.0
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -107,6 +115,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/animals/
  
  
  

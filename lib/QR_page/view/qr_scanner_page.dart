@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:testapp/QR_page/view/qr_generator.dart';
 import 'package:testapp/QR_page/view/qr_scan_view.dart';
@@ -16,6 +17,8 @@ class _QrViewPageState extends State<QrViewPage> {
     return Scaffold(
         backgroundColor: Colors.grey.shade800,
         appBar: AppBar(
+        toolbarHeight: 65.h,
+
           backgroundColor: Colors.grey.shade600,
           leading: IconButton(
             onPressed: () {
