@@ -32,6 +32,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen> {
 
   String _checkWinner() {
     const List<List<int>> winningCombinations = [
+      
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -62,34 +63,38 @@ class _TicTacToeScreenState extends State<TicTacToeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        toolbarHeight: 65.h,
+        leadingWidth: 30.w,
+        elevation: 0,
+        backgroundColor: Colors.green,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+        title: Text(
+          'Tic-Tac-Toe',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
       backgroundColor: Colors.black.withOpacity(0.9),
       body: Stack(
         fit: StackFit.expand,
         children: [
           Image.asset(
             "assets/tic_toc_toe.jpg",
-            fit: BoxFit.cover,
-          ),
-          AppBar(
-            toolbarHeight: 65.h,
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              ),
-            ),
-            title: Text(
-              'Tic-Tac-Toe',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            fit: BoxFit.fill,
+            color: Colors.green[300],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -117,32 +122,31 @@ class _TicTacToeScreenState extends State<TicTacToeScreen> {
   }
 
   Widget _buildBoard() {
-    return Center(
-      child: Container(
-        width: 300,
-        height: 300,
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => _handleTap(index),
-              child: Container(
-                color: Colors.blue[100],
-                child: Center(
-                  child: Text(
-                    _board[index],
-                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                  ),
+    return Container(
+      width: 300,
+      height: 380,
+      child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
+        ),
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () => _handleTap(index),
+            child: Container(
+              color: Colors.blue[100],
+              child: Center(
+                child: Text(
+                  _board[index],
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
               ),
-            );
-          },
-          itemCount: 9,
-        ),
+            ),
+          );
+        },
+        itemCount: 9,
       ),
     );
   }

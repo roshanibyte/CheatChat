@@ -9,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:testapp/apis/apis.dart';
 import 'package:testapp/chat_page/controller/chat_page_controller.dart';
 import 'package:testapp/chat_page/view/chat_user_card.dart';
+import 'package:testapp/chat_page/view/weather/weather_view.dart';
 import 'package:testapp/model/chatmodel.dart';
 import 'package:testapp/profile/views/profile_page_view.dart';
 import 'package:testapp/setting.dart';
@@ -60,11 +61,11 @@ class _ChatPageState extends State<ChatPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.9),
+        backgroundColor: Colors.green[300],
         appBar: AppBar(
           elevation: 1,
           toolbarHeight: 60.h,
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.green,
 
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -112,9 +113,7 @@ class _ChatPageState extends State<ChatPage> {
                 onSelected: (value) {
                   // Get.to(const Settings());
                 },
-                color: Colors.grey.shade800.withOpacity(
-                  0.93,
-                ),
+                color: Colors.green[400],
                 popUpAnimationStyle: AnimationStyle(
                   curve: Curves.decelerate,
                   duration: Duration(
@@ -140,7 +139,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     PopupMenuItem(
                       child: const Text(
-                        "Chat",
+                        "To Do Task",
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -151,13 +150,13 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     PopupMenuItem(
                       child: const Text(
-                        "Copy",
+                        "Weather",
                         style: TextStyle(
                           color: Colors.white,
                         ),
                       ),
                       onTap: () {
-                        Get.to(const TablePage());
+                        Get.to(const WeatherView());
                       },
                     ),
                     PopupMenuItem(
@@ -207,7 +206,7 @@ class _ChatPageState extends State<ChatPage> {
                       style: TextStyle(
                           shadows: [
                             Shadow(
-                                color: Colors.green,
+                                color: Colors.yellow,
                                 blurRadius: 1,
                                 offset: Offset(1, 1))
                           ],
@@ -224,7 +223,7 @@ class _ChatPageState extends State<ChatPage> {
                                 blurRadius: 1,
                                 offset: Offset(1, 1))
                           ],
-                          color: Colors.green,
+                          color: Colors.yellow,
                           fontSize: 27.sp,
                           fontWeight: FontWeight.w600),
                     ),
@@ -241,7 +240,7 @@ class _ChatPageState extends State<ChatPage> {
                     border: InputBorder.none,
                     hintText: "Name, Email...",
                     hintStyle: TextStyle(
-                      color: Colors.white54,
+                      color: Colors.white70,
                     ),
                   ),
                   onChanged: (value) {
@@ -323,12 +322,13 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          // backgroundColor: Colors.green,
+          backgroundColor: Colors.yellow,
           onPressed: () {
             showUpdatedMSGDialogue();
           },
           child: Icon(
             Icons.add_comment_rounded,
+            color: Colors.black,
           ),
         ),
       ),
@@ -341,22 +341,22 @@ class _ChatPageState extends State<ChatPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shadowColor: Colors.white,
+        shadowColor: Colors.green,
         elevation: 5,
-        backgroundColor: Colors.black.withOpacity(0.7),
+        backgroundColor: Colors.green.withOpacity(0.6),
         title: Row(
           children: [
             Icon(
               Icons.person_add,
               // size: 20.sp,
-              color: Colors.grey,
+              color: Colors.white,
             ),
             5.horizontalSpace,
             Text(
               "Add New",
               style: TextStyle(
                 fontSize: 20.sp,
-                color: Colors.grey,
+                color: Colors.white,
               ),
             ),
           ],
@@ -383,12 +383,12 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             hintStyle: TextStyle(
-              color: Colors.grey,
+              color: Colors.white,
             ),
             hintText: "Email",
             prefixIcon: Icon(
               Icons.email,
-              color: Colors.grey,
+              color: Colors.white,
             ),
           ),
         ),

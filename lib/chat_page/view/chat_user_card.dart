@@ -23,7 +23,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Colors.transparent,
+        color: Colors.green,
         // elevation: 3,
         elevation: 0,
         margin: EdgeInsets.symmetric(

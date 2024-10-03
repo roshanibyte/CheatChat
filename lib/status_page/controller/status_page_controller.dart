@@ -2,27 +2,30 @@ import 'dart:developer';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testapp/model.dart';
 
-class StatusPageController extends GetxController{
-CarouselController buttonCarouselController = CarouselController();
-  ScrollController sController = ScrollController();
+class StatusPageController extends GetxController {
+  CarouselController buttonCarouselController = CarouselController();
+  // ScrollController sController = ScrollController();
   int value = 1;
   int currentPage = 0;
+  RxBool isLoading = true.obs;
+  // static List<String> yourStory=["https://thewaywomenwork.com/wp-content/uploads/2014/07/safety-in-india-www.png"];
+  List status = [
+    "https://indiatechnologynews.in/wp-content/uploads/2022/04/gaytri.jpg",
+    "https://adpp.in/wp-content/uploads/2021/08/ADPPI-Profesional-Peers-www.adpp_.in_-scaled.jpg",
+    "https://thewaywomenwork.com/wp-content/uploads/2014/07/safety-in-india-www.png",
+    "https://indiatechnologynews.in/wp-content/uploads/2022/04/gaytri.jpg",
+    "https://adpp.in/wp-content/uploads/2021/08/ADPPI-Profesional-Peers-www.adpp_.in_-scaled.jpg",
+    "https://thewaywomenwork.com/wp-content/uploads/2014/07/safety-in-india-www.png",
+  ];
   NewsModal? jsonlist;
-  @override
-  
-    @override
-  void onInit() {
-    super.onInit();
-    getNews();
-  }
 
   Future<void> getNews() async {
+    isLoading.value = true;
     String url =
-        "https://newsapi.org/v2/top-headlines?country=in&apiKey=98ef0612a9ee40048f9b6e5b574e6e7c";
+        "https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=5c767a6470c24316a96126edec1aa726";
 
     // log("name ${jsonDecode(jsonDecode(jsonEncode(name)))}");
 
@@ -32,7 +35,7 @@ CarouselController buttonCarouselController = CarouselController();
       log("message");
       if (response.statusCode == 200) {
         jsonlist = NewsModal.fromJson(response.data);
-       
+
         log("List length ${jsonlist!.articles.length}");
       } else {
         log("no news= ${response.statusCode}");
@@ -40,5 +43,6 @@ CarouselController buttonCarouselController = CarouselController();
     } catch (e) {
       log("Exception here = $e");
     }
+    isLoading.value = false;
   }
 }

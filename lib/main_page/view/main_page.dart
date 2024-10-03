@@ -39,9 +39,9 @@ class _MainPageState extends State<MainPage> {
             controller.pageViewController.jumpToPage(value);
           },
           index: controller.nowPage.value,
-          backgroundColor: Colors.black.withOpacity(0.9),
+          backgroundColor: Colors.green.shade300,
           height: 50.h,
-          color: Colors.grey.shade600,
+          color: Colors.green,
           items: [
             Padding(
               padding: const EdgeInsets.all(8.0),

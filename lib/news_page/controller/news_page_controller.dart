@@ -7,17 +7,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 class NewsPAgeController extends GetxController {
   NewsModal? jsonlist;
+  RxBool isLoading = true.obs;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     getData();
-
   }
 
   getData() async {
+    isLoading.value = true;
     String url =
-        "https://newsapi.org/v2/top-headlines?country=in&apiKey=98ef0612a9ee40048f9b6e5b574e6e7c";
+        "https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=5c767a6470c24316a96126edec1aa726";
     try {
       final response = await get(
         Uri.parse(url),
@@ -34,6 +35,7 @@ class NewsPAgeController extends GetxController {
     } catch (e) {
       log("catch is -- $e");
     }
+    isLoading.value = false;
   }
 
   Future<void> launchUrls({required int index}) async {
@@ -41,7 +43,10 @@ class NewsPAgeController extends GetxController {
     if (await canLaunchUrl(urls)) {
       log("This is the url = $urls");
 
-      await launchUrl(urls, mode: LaunchMode.inAppBrowserView);
+      await launchUrl(
+        urls,
+        mode: LaunchMode.inAppBrowserView,
+      );
     } else {
       throw Exception('Could not launch $urls');
     }

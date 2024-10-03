@@ -2,19 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class CallPageView extends StatelessWidget {
   CallPageView({super.key});
 
   final now = DateTime.now();
+  List name = [
+    "Prince",
+    "Parv",
+    "Suhil",
+    "Sunil",
+    "Ram",
+    "Luv",
+    "Ravi",
+    "Arya",
+    "Mohsin",
+    "Ram",
+    "Luv",
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.9),
+      backgroundColor: Colors.green[300],
       appBar: AppBar(
         toolbarHeight: 65.h,
-
-        elevation: 1,
-        backgroundColor: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             onPressed: () {
@@ -44,7 +57,7 @@ class CallPageView extends StatelessWidget {
               onSelected: (value) {
                 // Get.to(const Settings());
               },
-              color: Colors.black,
+              color: Colors.green,
               icon: const Icon(
                 Icons.more_vert_rounded,
                 color: Colors.white,
@@ -128,39 +141,45 @@ class CallPageView extends StatelessWidget {
         height: Get.height,
         width: Get.width,
         child: ListView.builder(
-          // itemCount: 20,
+          itemCount: name.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.black38,
-                child: Icon(Icons.person),
-              ),
-              subtitle: Text(
-                "13th may, 12.00",
-                style: TextStyle(
-                  color: Colors.white,
+            return Container(
+              margin: EdgeInsets.all(10).copyWith(bottom: 5),
+              decoration: BoxDecoration(
+                  color: Colors.green, borderRadius: BorderRadius.circular(10)),
+              child: ListTile(
+                style: ListTileStyle.drawer,
+                leading: CircleAvatar(
+                  backgroundColor: Colors.black38,
+                  child: Icon(Icons.person),
                 ),
-              ),
-              title: Text(
-                "SuperHeros",
-                style: TextStyle(
-                  color: Colors.white,
+                subtitle: Text(
+                  "${10 + index}th may, ${10 + index}.00 PM",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              trailing: SizedBox(
-                width: 70,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.video_call,
-                      color: Colors.white,
-                    ),
-                    20.horizontalSpace,
-                    Icon(
-                      Icons.call,
-                      color: Colors.white,
-                    )
-                  ],
+                title: Text(
+                  name[index],
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                trailing: SizedBox(
+                  width: 70,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.video_call,
+                        color: Colors.white,
+                      ),
+                      20.horizontalSpace,
+                      Icon(
+                        Icons.call,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

@@ -14,14 +14,20 @@ class StausPage extends StatefulWidget {
 
 class _StausPageState extends State<StausPage> {
   final controller = Get.put(StatusPageController());
+  @override
+  void initState() {
+    super.initState();
+    controller.getNews();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.9),
+      backgroundColor: Colors.green[300],
       appBar: AppBar(
         toolbarHeight: 65.h,
-        backgroundColor: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             onPressed: () {
@@ -39,8 +45,12 @@ class _StausPageState extends State<StausPage> {
           ),
           IconButton(
             onPressed: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => const TestPage()));
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => ControlledRiveAnimation(),
+              //   ),
+              // );
             },
             icon: const Icon(
               Icons.search,
@@ -51,7 +61,7 @@ class _StausPageState extends State<StausPage> {
               onSelected: (value) {
                 // Get.to(const Settings());
               },
-              color: Colors.black,
+              color: Colors.green,
               icon: const Icon(
                 Icons.more_vert_rounded,
                 color: Colors.white,
@@ -104,7 +114,7 @@ class _StausPageState extends State<StausPage> {
                   ),
                   PopupMenuItem(
                     child: const Text(
-                      "Setting",
+                      "Settings",
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -150,17 +160,21 @@ class _StausPageState extends State<StausPage> {
               height: Get.height * 0.1,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 10,
+                itemCount: controller.status.length,
                 itemBuilder: (context, index) {
-                  return const Padding(
+                  return Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      maxRadius: 35,
-                      backgroundColor: Colors.black,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
+                    child: ClipOval(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: CircleAvatar(
+                          maxRadius: 35,
+                          backgroundColor: Colors.black,
+                          child: Image.network(
+                            controller.status[index],
+                            fit: BoxFit.cover,
+                            height: 70.h,
+                            width: 70.w,
+                          )),
                     ),
                   );
                 },
@@ -187,16 +201,11 @@ class _StausPageState extends State<StausPage> {
                 return Column(
                   children: [
                     controller.jsonlist?.articles[index].urlToImage == null
-                        ? Container(
-                            height: 170.h,
-                            color: Colors.grey,
-                            child: Center(
-                              child: Icon(
-                                Icons.image,
-                                color: Colors.white,
-                                size: 30.sp,
-                              ),
-                            ),
+                        ? Image.asset(
+                            "assets/errorimage.jpg",
+                            height: 160.h,
+                            width: Get.width,
+                            fit: BoxFit.fill,
                           )
                         : Image.network(
                             controller.jsonlist?.articles[index].urlToImage ??
@@ -209,13 +218,19 @@ class _StausPageState extends State<StausPage> {
                       height: 10,
                     ),
                     Text(
-                      controller.jsonlist?.articles[index].url ?? "",
-                      maxLines: 2,
+                      '"${controller.jsonlist?.articles[index].title ?? ""}"',
+                      maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Colors.blue,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
                       ),
-                    )
+                    ).paddingSymmetric(
+                      horizontal: 5.sp,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ],
                 );
               }),
@@ -225,7 +240,7 @@ class _StausPageState extends State<StausPage> {
                   setState(() {});
                 },
                 scrollDirection: Axis.horizontal,
-                height: 220.0,
+                height: 260.0,
                 enlargeCenterPage: true,
                 aspectRatio: 16 / 8,
                 autoPlayCurve: Curves.fastOutSlowIn,
@@ -234,7 +249,7 @@ class _StausPageState extends State<StausPage> {
               ),
             ),
             Text(
-              "Ads :",
+              "Ads : ",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15.sp,
@@ -248,8 +263,10 @@ class _StausPageState extends State<StausPage> {
                   child: ClipRect(
                     child: Banner(
                       message: "Get 50% off",
-                      textStyle:
-                          const TextStyle(color: Colors.white, fontSize: 10),
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
                       location: BannerLocation.topStart,
                       child: Image.asset(
                         "assets/banner.png",

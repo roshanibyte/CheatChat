@@ -119,7 +119,7 @@ class _GameViewPageState extends State<GameViewPage> {
                                 offset: Offset(1, 1),
                               )
                             ],
-                            color: Colors.yellow.shade900,
+                            color: Colors.pink.shade300,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.w700),
                       ),

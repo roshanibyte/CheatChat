@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:testapp/chat_page/view/kids_game/game_home_dart.dart';
 import 'package:testapp/chat_page/view/tic_toc_toe/tic_toc_toe.dart';
 import 'package:testapp/news_page/controller/news_page_controller.dart';
+import 'package:testapp/news_page/view/video_player_view.dart';
 import 'package:testapp/stopwatch.dart';
 
 class NewsPage extends StatefulWidget {
@@ -16,55 +17,16 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   final controller = Get.put(NewsPAgeController());
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getData();
-  // }
-
-  // NewsModal? jsonlist;
-
-  // getData() async {
-  //   String url =
-  //       "https://newsapi.org/v2/top-headlines?country=in&apiKey=98ef0612a9ee40048f9b6e5b574e6e7c";
-  //   try {
-  //     final response = await get(
-  //       Uri.parse(url),
-  //     );
-  //     log(response.body);
-
-  //     if (response.statusCode == 200) {
-  //       jsonlist = newsModalFromJson(response.body);
-  //       log("$jsonlist");
-  //       setState(() {});
-  //     } else {
-  //       log("${response.statusCode}");
-  //     }
-  //     log("$response");
-  //   } catch (e) {
-  //     log("catch is -- $e");
-  //   }
-  // }
-
-  // Future<void> _launchUrl({required int index}) async {
-  //   final Uri urls = Uri.parse(jsonlist?.articles[index].url.toString() ?? '');
-  //   if (await canLaunchUrl(urls)) {
-  //     log("This is the url = $urls");
-
-  //     await launchUrl(urls, mode: LaunchMode.inAppBrowserView);
-  //   } else {
-  //     throw Exception('Could not launch $urls');
-  //   }
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.9),
+      backgroundColor: Colors.green[300],
       appBar: AppBar(
         toolbarHeight: 65.h,
-
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -92,15 +54,76 @@ class _NewsPageState extends State<NewsPage> {
                 Icons.run_circle,
                 color: Colors.white,
               )),
-          IconButton(
-              onPressed: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => const TestPage()));
+          PopupMenuButton(
+              onSelected: (value) {
+                // Get.to(const Settings());
               },
+              color: Colors.green,
               icon: const Icon(
                 Icons.more_vert_rounded,
                 color: Colors.white,
-              ))
+              ),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: const Text(
+                      "Video Player",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      Get.to(
+                        () => YoutubeUrlPlayer(),
+                      );
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: const Text(
+                      "Chat",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      // Get.to(const ChoiceChipExample());
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: const Text(
+                      "Copy",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      // Get.to(const TablePage());
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: const Text(
+                      "Forward",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      // Get.to(const Graphpage());
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: const Text(
+                      "Settings",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      // Get.to(const Settings());
+                    },
+                  )
+                ];
+              }),
         ],
         leadingWidth: 30.w,
         leading: Padding(
@@ -117,108 +140,76 @@ class _NewsPageState extends State<NewsPage> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: controller.jsonlist?.articles.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              CachedNetworkImage(
-                imageUrl: controller.jsonlist?.articles[index].urlToImage ?? '',
-                // controller.jsonlist?.articles[index].urlToImage
-                //         .toString() ??
-                //     "",
-                errorWidget: (context, url, error) {
-                  return Image.asset(
-                    "assets/errorimage.jpg",
-                    height: 180,
-                    fit: BoxFit.fill,
-                    width: Get.width,
-                    // cacheWidth: Get.,
-                  );
-                  // Shimmer(
-                  //   gradient: const LinearGradient(
-                  //       colors: [
-                  //         Colors.white12,
-                  //         Colors.grey,
-                  //         Colors.white38,
-                  //         Colors.grey
-                  //       ],
-                  //       begin: Alignment.topLeft,
-                  //       end: Alignment.bottomRight,
-                  //       stops: [
-                  //         -0.4,
-                  //         -0.9,
-                  //         0.5,
-                  //         1,
-                  //       ]),
-                  //   child: Image.asset(
-                  //     "assets/palceholderImage.png",
-                  //     height: 150,
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-                  //     cacheHeight: 150,
-                  //     // cacheWidth: Get.,
-                  //   ),
-                  // );
-                },
-                placeholder: (context, url) {
-                  return Image.asset(
-                    "assets/palceholderImage.png",
-                    height: 150,
-                    fit: BoxFit.fill,
-                    width: Get.width,
-                    // cacheWidth: Get.,
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  maxLines: 4,
-                  controller.jsonlist?.articles[index].content == null
-                      ? controller.jsonlist?.articles[index].title.toString() ??
-                          ""
-                      : controller.jsonlist?.articles[index].content
-                              .toString() ??
-                          "",
-                  style: const TextStyle(
-                    color: Colors.white,
+        if (controller.jsonlist?.articles == null ||
+            controller.jsonlist!.articles.isEmpty) {
+          return Center(child: Text("No articles available"));
+        }
+
+        return ListView.builder(
+          itemCount: controller.jsonlist!.articles.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                const SizedBox(height: 10),
+                CachedNetworkImage(
+                  imageUrl:
+                      controller.jsonlist!.articles[index].urlToImage ?? '',
+                  errorWidget: (context, url, error) {
+                    return Image.asset(
+                      "assets/errorimage.jpg",
+                      height: 180,
+                      width: Get.width,
+                      fit: BoxFit.fill,
+                    );
+                  },
+                  placeholder: (context, url) {
+                    return Image.asset(
+                      "assets/palceholderImage.png",
+                      height: 150,
+                      width: Get.width,
+                      fit: BoxFit.fill,
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    controller.jsonlist?.articles[index].content?.toString() ??
+                        controller.jsonlist?.articles[index].title.toString() ??
+                        "",
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  controller.launchUrls(index: index);
-                },
-                child: Text(
-                  maxLines: 2,
-                  controller.jsonlist?.articles[index].url.toString() ?? "",
-                  style: const TextStyle(
-                    color: Colors.blue,
+                InkWell(
+                  onTap: () {
+                    controller.launchUrls(index: index);
+                  },
+                  child: Text(
+                    maxLines: 2,
+                    controller.jsonlist?.articles[index].url ?? "",
+                    style: const TextStyle(color: Colors.blue),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0).copyWith(bottom: 0),
-                child: Text(
-                  maxLines: 4,
-                  controller.jsonlist?.articles[index].author == null
-                      ? ""
-                      : "(By- ${controller.jsonlist?.articles[index].author})",
-                  style: const TextStyle(
-                    color: Colors.white,
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0).copyWith(bottom: 0),
+                  child: Text(
+                    controller.jsonlist!.articles[index].author != null
+                        ? "(By- ${controller.jsonlist!.articles[index].author})"
+                        : "",
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
-      ),
+              ],
+            );
+          },
+        );
+      }),
     );
   }
 }

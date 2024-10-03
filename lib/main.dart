@@ -31,23 +31,24 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'test',
         theme: ThemeData(
-            // elevatedButtonTheme: ElevatedButtonThemeData(
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStatePropertyAll(
-            //       Colors.amber,
-            //     ),
-            //   ),
-            // ),
-            useMaterial3: false,
-            appBarTheme: AppBarTheme(
-              elevation: 1,
-              backgroundColor: Colors.grey.shade600,
-              titleTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-              ),
-            )),
+          // elevatedButtonTheme: ElevatedButtonThemeData(
+          //   style: ButtonStyle(
+          //     backgroundColor: MaterialStatePropertyAll(
+          //       Colors.amber,
+          //     ),
+          //   ),
+          // ),
+          useMaterial3: false,
+          appBarTheme: AppBarTheme(
+            elevation: 1,
+            backgroundColor: Colors.grey.shade600,
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
         home: const SplashScreen(),
       ),
     );
